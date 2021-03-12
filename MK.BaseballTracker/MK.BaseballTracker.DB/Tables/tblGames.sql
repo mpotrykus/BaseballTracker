@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[tblGames]
+(
+	[GameId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+	[OpposingTeamId] UNIQUEIDENTIFIER NOT NULL, 
+    [TeamId] UNIQUEIDENTIFIER NOT NULL, 
+    [TeamScore] INT NULL DEFAULT 0, 
+	[OpposingTeamScore] INT NULL DEFAULT 0, 
+    [Home] BIT NOT NULL, 
+    [Date] DATETIME NOT NULL,
+)

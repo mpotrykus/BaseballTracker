@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MK.BaseballTracker.DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblGames">
+          <Key>
+            <PropertyRef Name="GameId" />
+          </Key>
+          <Property Name="GameId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OpposingTeamId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TeamId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TeamScore" Type="int" />
+          <Property Name="OpposingTeamScore" Type="int" />
+          <Property Name="Home" Type="bit" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblTeams">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Location" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Logo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblUsers">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateAdded" Type="datetime" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblUserTeam">
+          <Key>
+            <PropertyRef Name="UserTeamId" />
+          </Key>
+          <Property Name="UserTeamId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="TeamId" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Association Name="tblGames_OpposingTeamId">
+          <End Role="tblTeams" Type="Self.tblTeams" Multiplicity="1" />
+          <End Role="tblGames" Type="Self.tblGames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTeams">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="tblGames">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tblGames_TeamId">
+          <End Role="tblTeams" Type="Self.tblTeams" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblGames" Type="Self.tblGames" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTeams">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="tblGames">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tblUserTeam_TeamId">
+          <End Role="tblTeams" Type="Self.tblTeams" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblUserTeam" Type="Self.tblUserTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTeams">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="tblUserTeam">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tblUserTeam_UserId">
+          <End Role="tblUsers" Type="Self.tblUsers" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblUserTeam" Type="Self.tblUserTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsers">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblUserTeam">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="spGetGames" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="MKBaseballTrackerDBModelStoreContainer">
+          <EntitySet Name="tblGames" EntityType="Self.tblGames" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblTeams" EntityType="Self.tblTeams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblUserTeam" EntityType="Self.tblUserTeam" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="tblGames_OpposingTeamId" Association="Self.tblGames_OpposingTeamId">
+            <End Role="tblTeams" EntitySet="tblTeams" />
+            <End Role="tblGames" EntitySet="tblGames" />
+          </AssociationSet>
+          <AssociationSet Name="tblGames_TeamId" Association="Self.tblGames_TeamId">
+            <End Role="tblTeams" EntitySet="tblTeams" />
+            <End Role="tblGames" EntitySet="tblGames" />
+          </AssociationSet>
+          <AssociationSet Name="tblUserTeam_TeamId" Association="Self.tblUserTeam_TeamId">
+            <End Role="tblTeams" EntitySet="tblTeams" />
+            <End Role="tblUserTeam" EntitySet="tblUserTeam" />
+          </AssociationSet>
+          <AssociationSet Name="tblUserTeam_UserId" Association="Self.tblUserTeam_UserId">
+            <End Role="tblUsers" EntitySet="tblUsers" />
+            <End Role="tblUserTeam" EntitySet="tblUserTeam" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MK.BaseballTracker.DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblGame">
+          <Key>
+            <PropertyRef Name="GameId" />
+          </Key>
+          <Property Name="GameId" Type="Guid" Nullable="false" />
+          <Property Name="OpposingTeamId" Type="Guid" Nullable="false" />
+          <Property Name="TeamId" Type="Guid" Nullable="false" />
+          <Property Name="TeamScore" Type="Int32" />
+          <Property Name="OpposingTeamScore" Type="Int32" />
+          <Property Name="Home" Type="Boolean" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="tblTeam" Relationship="Self.tblGames_OpposingTeamId" FromRole="tblGames" ToRole="tblTeams" />
+          <NavigationProperty Name="tblTeam1" Relationship="Self.tblGames_TeamId" FromRole="tblGames" ToRole="tblTeams" />
+        </EntityType>
+        <EntityType Name="tblTeam">
+          <Key>
+            <PropertyRef Name="TeamId" />
+          </Key>
+          <Property Name="TeamId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Location" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Logo" Type="String" />
+          <NavigationProperty Name="tblGames" Relationship="Self.tblGames_OpposingTeamId" FromRole="tblTeams" ToRole="tblGames" />
+          <NavigationProperty Name="tblGames1" Relationship="Self.tblGames_TeamId" FromRole="tblTeams" ToRole="tblGames" />
+          <NavigationProperty Name="tblUserTeams" Relationship="Self.tblUserTeam_TeamId" FromRole="tblTeams" ToRole="tblUserTeam" />
+        </EntityType>
+        <EntityType Name="tblUser">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateAdded" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="tblUserTeams" Relationship="Self.tblUserTeam_UserId" FromRole="tblUsers" ToRole="tblUserTeam" />
+        </EntityType>
+        <EntityType Name="tblUserTeam">
+          <Key>
+            <PropertyRef Name="UserTeamId" />
+          </Key>
+          <Property Name="UserTeamId" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Guid" Nullable="false" />
+          <Property Name="TeamId" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="tblTeam" Relationship="Self.tblUserTeam_TeamId" FromRole="tblUserTeam" ToRole="tblTeams" />
+          <NavigationProperty Name="tblUser" Relationship="Self.tblUserTeam_UserId" FromRole="tblUserTeam" ToRole="tblUsers" />
+        </EntityType>
+        <Association Name="tblGames_OpposingTeamId">
+          <End Role="tblTeams" Type="Self.tblTeam" Multiplicity="1" />
+          <End Role="tblGames" Type="Self.tblGame" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTeams">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="tblGames">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tblGames_TeamId">
+          <End Role="tblTeams" Type="Self.tblTeam" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblGames" Type="Self.tblGame" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTeams">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="tblGames">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tblUserTeam_TeamId">
+          <End Role="tblTeams" Type="Self.tblTeam" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblUserTeam" Type="Self.tblUserTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblTeams">
+              <PropertyRef Name="TeamId" />
+            </Principal>
+            <Dependent Role="tblUserTeam">
+              <PropertyRef Name="TeamId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="tblUserTeam_UserId">
+          <End Role="tblUsers" Type="Self.tblUser" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="tblUserTeam" Type="Self.tblUserTeam" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblUsers">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="tblUserTeam">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BaseballTrackerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblGames" EntityType="Self.tblGame" />
+          <EntitySet Name="tblTeams" EntityType="Self.tblTeam" />
+          <EntitySet Name="tblUsers" EntityType="Self.tblUser" />
+          <EntitySet Name="tblUserTeams" EntityType="Self.tblUserTeam" />
+          <AssociationSet Name="tblGames_OpposingTeamId" Association="Self.tblGames_OpposingTeamId">
+            <End Role="tblTeams" EntitySet="tblTeams" />
+            <End Role="tblGames" EntitySet="tblGames" />
+          </AssociationSet>
+          <AssociationSet Name="tblGames_TeamId" Association="Self.tblGames_TeamId">
+            <End Role="tblTeams" EntitySet="tblTeams" />
+            <End Role="tblGames" EntitySet="tblGames" />
+          </AssociationSet>
+          <AssociationSet Name="tblUserTeam_TeamId" Association="Self.tblUserTeam_TeamId">
+            <End Role="tblTeams" EntitySet="tblTeams" />
+            <End Role="tblUserTeam" EntitySet="tblUserTeams" />
+          </AssociationSet>
+          <AssociationSet Name="tblUserTeam_UserId" Association="Self.tblUserTeam_UserId">
+            <End Role="tblUsers" EntitySet="tblUsers" />
+            <End Role="tblUserTeam" EntitySet="tblUserTeams" />
+          </AssociationSet>
+          <FunctionImport Name="spGetGames" ReturnType="Collection(MK.BaseballTracker.DBModel.spGetGames_Result)" />
+        </EntityContainer>
+        <ComplexType Name="spGetGames_Result">
+          <Property Type="Guid" Name="GameId" Nullable="false" />
+          <Property Type="Int32" Name="TeamScore" Nullable="true" />
+          <Property Type="Int32" Name="OpposingTeamScore" Nullable="true" />
+          <Property Type="DateTime" Name="Date" Nullable="false" Precision="23" />
+          <Property Type="Boolean" Name="Home" Nullable="false" />
+          <Property Type="Guid" Name="TeamId" Nullable="false" />
+          <Property Type="Guid" Name="OpposingTeamId" Nullable="false" />
+          <Property Type="String" Name="TeamName" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="OpposingTeamName" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MKBaseballTrackerDBModelStoreContainer" CdmEntityContainer="BaseballTrackerEntities">
+          <EntitySetMapping Name="tblGames">
+            <EntityTypeMapping TypeName="MK.BaseballTracker.DBModel.tblGame">
+              <MappingFragment StoreEntitySet="tblGames">
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="OpposingTeamId" ColumnName="OpposingTeamId" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+                <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
+                <ScalarProperty Name="OpposingTeamScore" ColumnName="OpposingTeamScore" />
+                <ScalarProperty Name="Home" ColumnName="Home" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblTeams">
+            <EntityTypeMapping TypeName="MK.BaseballTracker.DBModel.tblTeam">
+              <MappingFragment StoreEntitySet="tblTeams">
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Logo" ColumnName="Logo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUsers">
+            <EntityTypeMapping TypeName="MK.BaseballTracker.DBModel.tblUser">
+              <MappingFragment StoreEntitySet="tblUsers">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblUserTeams">
+            <EntityTypeMapping TypeName="MK.BaseballTracker.DBModel.tblUserTeam">
+              <MappingFragment StoreEntitySet="tblUserTeam">
+                <ScalarProperty Name="UserTeamId" ColumnName="UserTeamId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="spGetGames" FunctionName="MK.BaseballTracker.DBModel.Store.spGetGames">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MK.BaseballTracker.DBModel.spGetGames_Result">
+                <ScalarProperty Name="GameId" ColumnName="GameId" />
+                <ScalarProperty Name="TeamScore" ColumnName="TeamScore" />
+                <ScalarProperty Name="OpposingTeamScore" ColumnName="OpposingTeamScore" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Home" ColumnName="Home" />
+                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+                <ScalarProperty Name="OpposingTeamId" ColumnName="OpposingTeamId" />
+                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+                <ScalarProperty Name="OpposingTeamName" ColumnName="OpposingTeamName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

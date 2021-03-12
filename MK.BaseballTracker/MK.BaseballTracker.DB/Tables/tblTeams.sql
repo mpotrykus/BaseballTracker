@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[tblTeams]
+(
+	[TeamId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY,
+	[Name] VARCHAR (50) NOT NULL,
+	[Location] VARCHAR (50) NOT NULL, 
+    [Logo] VARCHAR(50) NULL,
+	
+
+)
